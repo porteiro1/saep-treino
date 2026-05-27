@@ -1,0 +1,38 @@
+<?php
+session_start();
+if(empty($_SESSION['idManager'])){
+  header('Location: sair.html', true, 301);
+  exit();
+}
+$hostname = "127.0.0.1";
+$user     = "root";
+$password = "";
+$database = "escola_db";
+
+$connect  = new mysqli($hostname,$user,$password,$database);
+
+$sql = "SELECT `id`, `product`, `quantity` FROM products WHERE id =" .$_GET['id'];
+$result = $connect -> query($sql);
+$row = $result -> fetch_array();
+?>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cadastrar Gerente</title>
+    <link href="style.css" rel="stylesheet">
+  </head>
+  <body>
+    <form method="post" action="atualizaProduto.php">
+      <input type="text" name = "id" value=<?php echo $row[0]?> hidden>
+      <label for="product">product:  </label>
+  <input type="text" name="product" value=<?php echo $row[1]?> required>
+      <br>
+      <label for="quantity">quantity: </label>
+  <input type="number" name="quantity" value=<?php echo $row[2]?> required>
+      <br>
+      <input type="submit" value="Submit">
+    </form>
+  </body>
+</html>
